@@ -1,23 +1,20 @@
-# 导入 sys 模块，用来修改标准输出的编码，解决 Windows 终端中文乱码
 import sys
-# 把标准输出重新配置为 UTF-8 编码，这样 print 中文就不会变成方块
 sys.stdout.reconfigure(encoding="utf-8")
 
 # 导入 json 模块，用来把数据存成 JSON 文件，以及从 JSON 文件读回来
 import json
 
 
-# 定义一个 Task 类，表示“一个任务”
+# Task 类
 class Task:
-    # 初始化方法，创建 Task 对象时自动调用
+    # 初始化方法
     # id：任务编号；title：任务标题；done：是否完成，默认 False
     def __init__(self, id, title, done=False):
-        self.id = id          # 把传入的 id 存到对象自己的属性里
-        self.title = title    # 把传入的 title 存到对象自己的属性里
-        self.done = done      # 把传入的 done 存到对象自己的属性里
+        self.id = id
+        self.title = title
+        self.done = done
 
-    # 把 Task 对象转成字典，方便存成 JSON
-    # JSON 不认识 Python 对象，只认识字典、列表、字符串、数字这些
+    # 将 Task 对象转成字典，方便存成 JSON
     def to_dict(self):
         return {"id": self.id, "title": self.title, "done": self.done}
 
@@ -29,12 +26,11 @@ class Task:
         # 返回格式化后的字符串，例如 "[ ] 1. 学 Python"
         return f"[{mark}] {self.id}. {self.title}"
 
-
-# 定义一个 TaskList 类，表示“任务列表”，管理所有 Task 对象
+# TaskList 类
 class TaskList:
     # 初始化方法，创建一个空的任务列表
     def __init__(self):
-        self.tasks = []      # 用来存放所有 Task 对象的列表
+        self.tasks = []
         self.next_id = 1     # 下一个要分配的任务编号，只增不减，避免重复
 
     # 添加任务
@@ -71,9 +67,9 @@ class TaskList:
             json.dump(data, f, ensure_ascii=False, indent=2)
         print("已保存")
 
-    # 从 JSON 文件加载任务
+    # 从 JSON 文件加载任务列表到 TaskList 对象中
     def load(self):
-        # 用 try/except 捕获文件不存在的情况
+        # 用 try/except 进行异常处理
         try:
             # 打开文件，模式 "r" 表示读取
             with open("todos.json", "r", encoding="utf-8") as f:
@@ -96,7 +92,7 @@ class TaskList:
 if __name__ == "__main__":
     # 创建一个 TaskList 对象
     tl = TaskList()
-    # 尝试从文件加载已有任务
+    # 从文件加载已有任务
     tl.load()
     # 添加两个测试任务
     tl.add("学 Python")
